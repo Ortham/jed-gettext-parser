@@ -11,7 +11,7 @@ JavaScript Gettext `.mo` file parsing for [Jed](https://github.com/slexaxton/Jed
 
 Jed doesn't supply Gettext translation file parsers, so this library can act as the bridge between Gettext binary files and Jed. Maybe in future it will also gain the ability to parse `.po` files.
 
-*Note: Jed Gettext Parser is made to work with Jed, but is a third-party library. Please direct any support queries to this repository's issue tracker, and [WrinklyNinja](https://github.com/WrinklyNinja).*
+*Note: Jed Gettext Parser is made to work with Jed, but is a third-party library. Please direct any support queries to this repository's issue tracker, and [the author](https://github.com/WrinklyNinja).*
 
 ## Requirements
 
