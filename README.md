@@ -9,7 +9,7 @@ JavaScript gettext `.mo` file parsing for Jed.
 
 [Jed](https://github.com/slexaxton/Jed/) provides a very nice interface for translation using Gettext in Javascript.
 
-Jed doesn't supply Gettext translation file parsers: this library can act as the bridge between Gettext binary files and Jed. Maybe in future it will also gain the ability to parse `.po` files.
+Jed doesn't supply Gettext translation file parsers, so this library can act as the bridge between Gettext binary files and Jed. Maybe in future it will also gain the ability to parse `.po` files.
 
 ## Requirements
 
@@ -30,20 +30,13 @@ jed-gettext-parser can be loaded as a browser global or an AMD module.
 var moBuffer;  // An ArrayBuffer.
 // Fill the moBuffer with the contents of a .mo file in whatever way you like.
 
-// messages is an object holding original string keys and translation array
-// values as expected by Jed. It's domain is not set though, as this info
-// is not available from within the mo file.
-var messages = jedGettextParser.mo.parse(moBuffer);
-
-// Set the domain for the translation data to eg. "ui".
-messages[""].domain = "ui";
+// messages is an object holding locale data as expected by Jed.
+var locale_data = jedGettextParser.mo.parse(moBuffer);
 
 // Now load using Jed.
 var i18n = new Jed({
-    locale_data: {
-        "ui": messsages,
-    },
-    "domain": "ui"
+    'locale_data': locale_data,
+    'domain': 'messages'
 });
 </script>
 ```
@@ -55,23 +48,35 @@ require(['jedGettextParser', 'jed'], function(jedGettextParser, Jed) {
     var moBuffer;  // An ArrayBuffer.
     // Fill the moBuffer with the contents of a .mo file in whatever way you like.
 
-    // messages is an object holding original string keys and translation array
-    // values as expected by Jed. It's domain is not set though, as this info
-    // is not available from within the mo file.
-    var messages = jedGettextParser.mo.parse(moBuffer);
-
-    // Set the domain for the translation data to eg. "ui".
-    messages[""].domain = "ui";
+    // messages is an object holding locale data as expected by Jed.
+    var locale_data = jedGettextParser.mo.parse(moBuffer);
 
     // Now load using Jed.
     var i18n = new Jed({
-        locale_data: {
-            "ui": messsages,
-        },
-        "domain": "ui"
+        'locale_data': locale_data,
+        'domain': 'messages'
     });
 });
 ```
+
+## Usage
+
+The library currently exposes only one function:
+
+```
+var data = jedGettextParser.mo.parse(buffer, options);
+```
+
+`data` is an object that can be used as the value of Jed's `locale_data` initialisation option. The `buffer` argument is an `ArrayBuffer` object that holds the contents of the `.mo` file to parse. The `options` argument is an object with the following members (default values given):
+
+```
+var options = {
+    encoding: undefined,
+    domain: 'messages'
+}
+```
+
+If `options.encoding` is undefined, jedGettextParser will use the encoding given in the `.mo` file to interpret the string data. Otherwise, valid values are identical to those accepted by the [TextDecoder constructor](https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder.TextDecoder#Parameters) for its first parameter.
 
 ## Motivation
 

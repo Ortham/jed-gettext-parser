@@ -11,16 +11,11 @@
 }(this, function() {
     /* Return what this module exports. */
 
-    function Parser(raw, encoding) {
+    function Parser() {
         this._littleEndian;
-        this._dataView = new DataView(raw);
-        this._encoding = encoding;
+        this._dataView;
+        this._encoding;
 
-        this._language;
-        this._pluralForms;
-
-        this._revision;
-        this._stringsCount;
         this._originalOffset;
         this._translationOffset;
     }
@@ -37,28 +32,37 @@
         }
     }
 
+    Parser.prototype._readTranslationPair = function(originalOffset, translationOffset) {
+        var length, position, idBytes, strBytes;
+        /* Get original byte array, that forms the key. */
+        length = this._dataView.getUint32(originalOffset, this._littleEndian);
+        position = this._dataView.getUint32(originalOffset + 4, this._littleEndian);
+        idBytes = new Uint8Array(this._dataView.buffer, position, length);
+
+        /* Get translation byte array, that forms the value. */
+        length = this._dataView.getUint32(translationOffset, this._littleEndian);
+        position = this._dataView.getUint32(translationOffset + 4, this._littleEndian);
+        strBytes = new Uint8Array(this._dataView.buffer, position, length);
+
+        return {
+            id: idBytes,
+            str: strBytes
+        };
+    }
+
     Parser.prototype._parseHeader = function() {
         /* Read translation header. This is stored as a msgstr where the msgid
            is '', so it's the first entry in the translation block, since
-           strings are sorted. */
-        var length, position, keyBytes, valueBytes;
-        /* Assume that the header is in UTF-8. We only want the language,
-           encoding and plural forms values, which should all be ASCII anyway.
+           strings are sorted. Assume that the header is in UTF-8. We only want
+           the language, encoding and plural forms values, which should all be
+           ASCII anyway.
            */
-        var decoder = new TextDecoder();
+        var msgBytes = this._readTranslationPair(this._originalOffset, this._translationOffset);
 
-        /* Get original byte array, that forms the key. */
-        length = this._dataView.getUint32(this._originalOffset, this._littleEndian);
-        position = this._dataView.getUint32(this._originalOffset + 4, this._littleEndian);
-        keyBytes = new Uint8Array(this._dataView.buffer, position, length);
-
-        /* Get translation byte array, that forms the value. */
-        length = this._dataView.getUint32(this._translationOffset, this._littleEndian);
-        position = this._dataView.getUint32(this._translationOffset + 4, this._littleEndian);
-        valueBytes = new Uint8Array(this._dataView.buffer, position, length);
-
-       if (keyBytes.byteLength == 0) {
-            var str = decoder.decode(valueBytes);
+        var language, pluralForms;
+        if (msgBytes.id.byteLength == 0) {
+            var decoder = new TextDecoder();
+            var str = decoder.decode(msgBytes.str);
 
             headers = {};
             str.split("\n").forEach(function(line){
@@ -70,7 +74,7 @@
             });
 
             /* Get encoding if not given. */
-            if (this._encoding == undefined) {
+            if (!this._encoding) {
                 var pos = headers['Content-Type'].indexOf('charset=');
 
                 if (pos != -1 && pos + 8 < headers['Content-Type'].length) {
@@ -80,11 +84,19 @@
             }
 
             /* Get language from header. */
-            this._language = headers['Language'];
+            language = headers['Language'];
 
             /* Get plural forms from header. */
-            this._pluralForms = headers['Plural-Forms'];
-       }
+            pluralForms = headers['Plural-Forms'];
+        }
+
+        return {
+            '': {
+                'domain': '',
+                'lang': language,
+                'plural_forms': pluralForms,
+            }
+        }
     }
 
     Parser.prototype._splitPlurals = function(msgid, msgstr) {
@@ -98,27 +110,20 @@
         }
     }
 
-    Parser.prototype.parse = function() {
+    Parser.prototype.parse = function(buffer, encoding) {
+        this._dataView = new DataView(buffer);
+        this._encoding = encoding;
+
         this._getEndianness();
 
-        /* Get size and offsets. */
-        this._revision = this._dataView.getUint32(4, this._littleEndian);
-        this._stringsCount = this._dataView.getUint32(8, this._littleEndian);
+        /* Get size and offsets. Skip the revision, it's unnecessary. */
+        var stringsCount = this._dataView.getUint32(8, this._littleEndian);
         this._originalOffset = this._dataView.getUint32(12, this._littleEndian);
         this._translationOffset = this._dataView.getUint32(16, this._littleEndian);
 
-        /* Parse header for info. */
-        this._parseHeader();
-
-        /* Create Jed locale_data object. It's incomplete here because the mo
-           file doesn't have the domain info. */
-        var jedLocaleData = {
-            '': {
-                'domain': '',
-                'lang': this._language,
-                'plural_forms': this._pluralForms,
-            },
-        };
+        /* Parse header for info, and use it to create the Jed locale_data
+           object 'header'. */
+        var jedLocaleData = this._parseHeader();
 
         /* Create a TextDecoder for encoding conversion. */
         var decoder = new TextDecoder(this._encoding);
@@ -126,24 +131,14 @@
         /* Now get translations. */
         var originalOffset = this._originalOffset + 8;
         var translationOffset = this._translationOffset + 8;
-        var length, position, msgid, msgstr;
-        for (var i = 1; i < this._stringsCount; ++i) {
-            /* Get original byte array, that forms the key. */
-            length = this._dataView.getUint32(originalOffset, this._littleEndian);
-            originalOffset += 4;
-            position = this._dataView.getUint32(originalOffset, this._littleEndian);
-            originalOffset += 4;
-            msgid = decoder.decode(new Uint8Array(this._dataView.buffer, position, length));
+        for (var i = 1; i < stringsCount; ++i) {
+            var msgBytes = this._readTranslationPair(originalOffset, translationOffset);
+            var msg = this._splitPlurals( decoder.decode(msgBytes.id), decoder.decode(msgBytes.str) );
 
-            /* Get translation byte array, that forms the value. */
-            length = this._dataView.getUint32(translationOffset, this._littleEndian);
-            translationOffset += 4;
-            position = this._dataView.getUint32(translationOffset, this._littleEndian);
-            translationOffset += 4;
-            msgstr = decoder.decode(new Uint8Array(this._dataView.buffer, position, length));
-
-            var msg = this._splitPlurals(msgid, msgstr);
             jedLocaleData[msg.id] = [ null ].concat(msg.str);
+
+            originalOffset += 8;
+            translationOffset += 8;
         }
 
         return jedLocaleData;
@@ -152,10 +147,19 @@
     return {
 
         mo: {
-            parse: function(buffer, encoding) {
-                var parser = new Parser(buffer, encoding);
+            parse: function(buffer, options) {
 
-                return parser.parse();
+                /* Leave the encoding undefined if no options are given. */
+                options = options || { domain: 'messages' };
+                options.domain = options.domain || 'messages';
+
+                var parser = new Parser();
+                var messages = parser.parse(buffer, options.encoding);
+
+                messages[''].domain = options.domain;
+                var locale_data = {};
+                locale_data[options.domain] = messages;
+                return locale_data;
             }
         }
     };
