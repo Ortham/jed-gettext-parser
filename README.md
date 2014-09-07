@@ -1,7 +1,7 @@
-jed-gettext-parser
+Jed Gettext Parser
 ==================
 
-JavaScript gettext `.mo` file parsing for Jed.
+JavaScript Gettext `.mo` file parsing for [Jed](https://github.com/slexaxton/Jed/).
 
 ## Introduction
 
@@ -11,16 +11,18 @@ JavaScript gettext `.mo` file parsing for Jed.
 
 Jed doesn't supply Gettext translation file parsers, so this library can act as the bridge between Gettext binary files and Jed. Maybe in future it will also gain the ability to parse `.po` files.
 
+*Note: Jed Gettext Parser is made to work with Jed, but is a third-party library. Please direct any support queries to this repository's issue tracker, and [WrinklyNinja](https://github.com/WrinklyNinja).*
+
 ## Requirements
 
-jed-gettext-parser uses some fairly recent Javascript features:
+Jed Gettext Parser uses some fairly recent Javascript features:
 
 * [Typed Arrays](http://caniuse.com/#feat=typedarrays)
 * The Encoding API (available in Firefox 20 and Chromium 38: a polyfill can be found [here](https://github.com/inexorabletash/text-encoding))
 
 ## Usage
 
-jed-gettext-parser can be loaded as a browser global or an AMD module.
+Jed Gettext Parser can be loaded as a browser global or an AMD module.
 
 ### Browser Global
 
@@ -76,7 +78,7 @@ var options = {
 }
 ```
 
-If `options.encoding` is undefined, jedGettextParser will use the encoding given in the `.mo` file to interpret the string data. Otherwise, valid values are identical to those accepted by the [TextDecoder constructor](https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder.TextDecoder#Parameters) for its first parameter.
+If `options.encoding` is undefined, the encoding given in the `.mo` file will be used to interpret the string data. Otherwise, valid values are identical to those accepted by the [TextDecoder constructor](https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder.TextDecoder#Parameters) for its first parameter.
 
 ## Motivation
 
