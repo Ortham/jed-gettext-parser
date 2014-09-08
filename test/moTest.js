@@ -219,6 +219,23 @@ describe('mo', function(){
                 done();
             }).catch(done);
         })
+        it('should be able to decode mo files encoded in Windows-1251', function(done){
+            getMOFile('ru_RU_cp1251').then(function(buffer){
+                (function(){
+
+                    var locale_data = jedGettextParser.mo.parse(buffer);
+                    locale_data.should.be.an.Object;
+                    locale_data.should.have.property('messages');
+
+                    locale_data.messages.should.have.property('Manage Comments', [
+                        null,
+                        'Управление комментариями'
+                    ]);
+
+                }).should.not.throw();
+                done();
+            }).catch(done);
+        })
         it('should provide output accepted by Jed.', function(done){
             getMOFile('ru_RU').then(function(buffer){
                 (function(){
