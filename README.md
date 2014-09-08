@@ -1,6 +1,8 @@
 Jed Gettext Parser
 ==================
 
+[![Build Status](https://travis-ci.org/WrinklyNinja/jed-gettext-parser.svg)](https://travis-ci.org/WrinklyNinja/jed-gettext-parser)
+
 JavaScript Gettext `.mo` file parsing for [Jed](https://github.com/slexaxton/Jed/).
 
 ## Introduction
