@@ -1,3 +1,7 @@
 language: node_js
 node_js:
   - "0.10"
+
+before_install:
+  - chmod +x ./test/get-files.sh
+  - ./test/get-files.sh
