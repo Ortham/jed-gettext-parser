@@ -81,6 +81,9 @@
                     /* TextDecoder expects a lowercased encoding name. */
                     this._encoding = headers['Content-Type'].substring(pos + 8).toLowerCase();
                 }
+                if (!this._encoding) {
+                    this._encoding = 'utf-8';
+                }
             }
 
             /* Get language from header. */
