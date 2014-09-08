@@ -2,6 +2,7 @@
 if ('undefined' != typeof require) {
     var jed = require('jed');
     var jedGettextParser = require('../jedGettextParser');
+    var Promise = require('promise');
 }
 
 function load(url) {

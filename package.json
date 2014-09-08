@@ -14,7 +14,8 @@
     "devDependencies": {
         "mocha": "~1.21",
         "should": "~4.0",
-        "jed": "0.5.2"
+        "jed": "0.5.2",
+        "promise": "5.0.0"
     },
     "scripts": {
         "test": "mocha test/moTest.js"
