@@ -43,12 +43,20 @@
         /* Get original byte array, that forms the key. */
         length = this._dataView.getUint32(originalOffset, this._littleEndian);
         position = this._dataView.getUint32(originalOffset + 4, this._littleEndian);
-        idBytes = new Uint8Array(this._dataView.buffer, position, length);
+        try {
+            idBytes = new Uint8Array(this._dataView.buffer, position, length);
+        } catch(e) {
+            throw new Error('The given ArrayBuffer data is corrupt or incomplete.');
+        }
 
         /* Get translation byte array, that forms the value. */
         length = this._dataView.getUint32(translationOffset, this._littleEndian);
         position = this._dataView.getUint32(translationOffset + 4, this._littleEndian);
-        strBytes = new Uint8Array(this._dataView.buffer, position, length);
+        try {
+            strBytes = new Uint8Array(this._dataView.buffer, position, length);
+        } catch(e) {
+            throw new Error('The given ArrayBuffer data is corrupt or incomplete.');
+        }
 
         return {
             id: idBytes,
@@ -120,12 +128,21 @@
     }
 
     Parser.prototype.parse = function(buffer, encoding) {
+
+        /* A mo file can be empty apart from its magic, revision, strings count,
+           offsets and hash table size, but fields for these must all exist, so
+           verify the file is large enough. */
+        if (buffer.byteLength < 28) {
+            throw new Error('The given ArrayBuffer is too small to hold a valid .mo file.');
+        }
+
         this._dataView = new DataView(buffer);
         this._encoding = encoding;
 
         this._getEndianness();
 
-        /* Get size and offsets. Skip the revision, it's unnecessary. */
+        /* Get size and offsets. Skip the revision and hash table, they're
+           unnecessary. */
         var stringsCount = this._dataView.getUint32(8, this._littleEndian);
         this._originalOffset = this._dataView.getUint32(12, this._littleEndian);
         this._translationOffset = this._dataView.getUint32(16, this._littleEndian);

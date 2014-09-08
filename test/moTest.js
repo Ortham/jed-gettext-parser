@@ -15,7 +15,7 @@ function load(url) {
                 if (evt.target.status == 0 || evt.target.status >= 200 && evt.target.status < 400) {
                     resolve(evt.target.response);
                 } else {
-                    reject(Error('XHR Error'));
+                    reject(new Error('XHR Error'));
                 }
             }
         }, false);
@@ -56,7 +56,16 @@ describe('mo', function(){
                     buffer = buffer.slice(0, 20);
                     jedGettextParser.mo.parse(buffer);
                 });
-            }).should.throw();
+            }).should.throw('The given ArrayBuffer is too small to hold a valid .mo file.');
+        })
+        it("should throw for an ArrayBuffer that holds an incomplete mo file", function(){
+            (function(){
+                getWordPressMOFile('zh_CN').then(function(buffer){
+                    /* MO files have a 28 byte header, so that's an easy check for minimum file size. */
+                    buffer = buffer.slice(0, buffer.byteLength - 20);
+                    jedGettextParser.mo.parse(buffer);
+                });
+            }).should.throw('The given ArrayBuffer data is corrupt or incomplete.');
         })
     })
 })
