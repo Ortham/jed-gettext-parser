@@ -1,26 +1,45 @@
 'use strict';
 if ('undefined' != typeof require) {
+    /* Node */
     var jed = require('jed');
     var jedGettextParser = require('../jedGettextParser');
     var Promise = require('promise');
+    var fs = require('fs');
 }
 
 function load(url) {
     return new Promise(function(resolve, reject){
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', url);
-        xhr.responseType = 'arraybuffer';
-        xhr.addEventListener('readystatechange', function(evt){
-            if (evt.target.readyState == 4) {
-                /* Status is 0 for local file URL loading. */
-                if (evt.target.status == 0 || evt.target.status >= 200 && evt.target.status < 400) {
-                    resolve(evt.target.response);
-                } else {
-                    reject(new Error('XHR Error'));
+        if (typeof XMLHttpRequest != "undefined") {
+            /* Browser */
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url);
+            xhr.responseType = 'arraybuffer';
+            xhr.addEventListener('readystatechange', function(evt){
+                if (evt.target.readyState == 4) {
+                    /* Status is 0 for local file URL loading. */
+                    if (evt.target.status == 0 || evt.target.status >= 200 && evt.target.status < 400) {
+                        resolve(evt.target.response);
+                    } else {
+                        reject(new Error('XHR Error'));
+                    }
                 }
-            }
-        }, false);
-        xhr.send();
+            }, false);
+            xhr.send();
+        } else {
+            fs.readFile(url, function(err, data){
+                if (err) {
+                    reject(err);
+                } else {
+                    /* Convert to an ArrayBuffer */
+                    var aBuf = new ArrayBuffer(data.length);
+                    var view = new Uint8Array(aBuf);
+                    for (var i = 0; i < data.length; ++i) {
+                        view[i] = data[i];
+                    }
+                    resolve(aBuf);
+                }
+            });
+        }
     });
 };
 function getMOFile(locale) {
