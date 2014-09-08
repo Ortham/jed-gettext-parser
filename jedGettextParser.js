@@ -158,7 +158,11 @@
         var jedLocaleData = this._parseHeader();
 
         /* Create a TextDecoder for encoding conversion. */
-        var decoder = new TextDecoder(this._encoding);
+        try {
+            var decoder = new TextDecoder(this._encoding);
+        } catch(e) {
+            throw new Error(e.message.split(':')[1].trim());
+        }
 
         /* Now get translations. */
         var originalOffset = this._originalOffset + 8;

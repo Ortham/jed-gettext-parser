@@ -62,15 +62,7 @@ describe('getMOFile', function(){
             done();
         });
     })
-    it('should succeed for a present file (zh_CN.mo)', function(done){
-        getMOFile('zh_CN').then(function(buffer){
-            buffer.should.be.an.Object;
-            done();
-        }).catch(function(err){
-            done(err);
-        })
-    })
-    it('should succeed for a present file (ru_RU.mo)', function(done){
+    it('should succeed for a present file (ru_RU)', function(done){
         getMOFile('ru_RU').then(function(buffer){
             buffer.should.be.an.Object;
             done();
@@ -104,7 +96,7 @@ describe('mo', function(){
         })
         it('should throw for an ArrayBuffer that is too small to hold an mo file', function(done){
             /* This getMOFile is already tested above. */
-            getMOFile('zh_CN').then(function(buffer){
+            getMOFile('ru_RU').then(function(buffer){
                 (function(){
                     /* MO files have a 28 byte header, so that's an easy check for minimum file size. */
                     buffer = buffer.slice(0, 20);
@@ -115,7 +107,7 @@ describe('mo', function(){
         })
         it('should throw for an ArrayBuffer that holds an incomplete mo file', function(done){
             /* This getMOFile is already tested above. */
-            getMOFile('zh_CN').then(function(buffer){
+            getMOFile('ru_RU').then(function(buffer){
                 (function(){
                     /* Cut the end off the file. */
                     buffer = buffer.slice(0, buffer.byteLength - 20);
@@ -124,34 +116,8 @@ describe('mo', function(){
                 done();
             }).catch(done);
         })
-        it('should succeed for a valid ArrayBuffer (zh_CN)', function(done){
-            /* This getMOFile is already tested above. */
-            getMOFile('zh_CN').then(function(buffer){
-                (function(){
-                    var locale_data = jedGettextParser.mo.parse(buffer);
-                    locale_data.should.be.an.Object;
-                    locale_data.should.have.property('messages');
-                    locale_data.messages.should.have.property('');
-                    locale_data.messages[''].should.have.properties({
-                        domain: 'messages',
-                        lang: 'zh_CN',
-                        plural_forms: 'nplurals=1; plural=0;'
-                    });
 
-                    locale_data.messages.should.have.property('Activation Key:', [
-                        null,
-                        '激活密钥：'
-                    ]);
-
-                    locale_data.messages.should.have.property('add new from admin bar\u0004Link', [
-                        null,
-                        '链接'
-                    ]);
-                }).should.not.throw();
-                done();
-            }).catch(done);
-        })
-        it('should succeed for a valid ArrayBuffer (ru_RU)', function(done){
+        it('should succeed for a valid ArrayBuffer with contexts and plurals', function(done){
             /* This getMOFile is already tested above. */
             getMOFile('ru_RU').then(function(buffer){
                 (function(){
@@ -184,6 +150,72 @@ describe('mo', function(){
                     ]);
 
                 }).should.not.throw();
+                done();
+            }).catch(done);
+        })
+        it('should successfully load under a non-default domain', function(done){
+            getMOFile('ru_RU').then(function(buffer){
+                (function(){
+                    var opts = {
+                        domain: 'ui'
+                    };
+
+                    var locale_data = jedGettextParser.mo.parse(buffer, opts);
+                    locale_data.should.be.an.Object;
+                    locale_data.should.have.property('ui');
+                    locale_data.ui.should.have.property('');
+                    locale_data.ui[''].should.have.properties({
+                        domain: 'ui',
+                        lang: 'ru_RU',
+                        plural_forms: 'nplurals=4; plural=(n==1) ? 0 : (n%10==1 && n%100!=11) ? 3 : ((n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) ? 1 : 2);'
+                    });
+
+                    locale_data.ui.should.have.property('Manage Comments', [
+                        null,
+                        'Управление комментариями'
+                    ]);
+
+                }).should.not.throw();
+                done();
+            }).catch(done);
+        })
+        it('should accept a valid encoding option', function(done){
+            getMOFile('ru_RU').then(function(buffer){
+                (function(){
+                    var opts = {
+                        encoding: 'windows-1252'
+                    };
+
+                    var locale_data = jedGettextParser.mo.parse(buffer, opts);
+                    locale_data.should.be.an.Object;
+                    locale_data.should.have.property('messages');
+                    locale_data.messages.should.have.property('');
+                    locale_data.messages[''].should.have.properties({
+                        domain: 'messages',
+                        lang: 'ru_RU',
+                        plural_forms: 'nplurals=4; plural=(n==1) ? 0 : (n%10==1 && n%100!=11) ? 3 : ((n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) ? 1 : 2);'
+                    });
+
+                    /* String gets mangled because it's the wrong encoding. */
+                    locale_data.messages.should.have.property('Manage Comments', [
+                        null,
+                        'Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ ÐºÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ð°Ñ€Ð¸ÑÐ¼Ð¸'
+                    ]);
+
+                }).should.not.throw();
+                done();
+            }).catch(done);
+        })
+        it('should throw for an invalid encoding option', function(done){
+            getMOFile('ru_RU').then(function(buffer){
+                (function(){
+                    var opts = {
+                        encoding: 'fake-encoding'
+                    };
+
+                    var locale_data = jedGettextParser.mo.parse(buffer, opts);
+
+                }).should.throw("The encoding label provided ('fake-encoding') is invalid.");
                 done();
             }).catch(done);
         })
