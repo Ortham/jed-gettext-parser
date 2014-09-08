@@ -1,0 +1,22 @@
+{
+    "name": "jed-gettext-parser",
+    "description": "JavaScript Gettext .mo file parsing for Jed.",
+    "author": "Oliver Hamlet <oliver.hamlet@gmail.com>",
+    "version": "0.1.0",
+    "main": "jedGettextParser.js",
+    "files": [
+        "jedGettextParser.js"
+    ],
+    "license": "MIT",
+    "dependencies": {
+        "text-encoding": "0.1.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/WrinklyNinja/jed-gettext-parser.git"
+    },
+    "bugs": {
+        "url": "https://github.com/WrinklyNinja/jed-gettext-parser/issues"
+    },
+    "homepage": "https://github.com/WrinklyNinja/jed-gettext-parser"
+}
