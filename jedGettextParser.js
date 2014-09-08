@@ -1,5 +1,6 @@
 /* Thanks to the UMD for providing the example for defining an AMD + browser
    global module. */
+'use strict';
 (function(root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
@@ -28,7 +29,7 @@
         } else if (this._dataView.getUint32(0, false) == this._MAGIC){
             this._littleEndian = false;
         } else {
-            throw Error('Not a gettext binary message catalog file.');
+            throw new Error('Not a gettext binary message catalog file.');
         }
     }
 
@@ -64,7 +65,7 @@
             var decoder = new TextDecoder();
             var str = decoder.decode(msgBytes.str);
 
-            headers = {};
+            var headers = {};
             str.split("\n").forEach(function(line){
                 /* Header format is like HTTP headers. */
                 var parts = line.split(':');
@@ -155,6 +156,10 @@
                 /* Leave the encoding undefined if no options are given. */
                 options = options || { domain: 'messages' };
                 options.domain = options.domain || 'messages';
+
+                if (!buffer || typeof buffer != 'arraybuffer') {
+                    throw new Error('First argument must be an ArrayBuffer.');
+                }
 
                 var parser = new Parser();
                 var messages = parser.parse(buffer, options.encoding);

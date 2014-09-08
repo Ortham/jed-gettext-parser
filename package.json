@@ -11,6 +11,14 @@
     "dependencies": {
         "text-encoding": "0.1.0"
     },
+    "devDependencies": {
+        "mocha": "~1.21",
+        "should": "~4.0",
+        "jed": "0.5.2"
+    },
+    "scripts": {
+        "test": "mocha test/moTest.js"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/WrinklyNinja/jed-gettext-parser.git"
