@@ -22,29 +22,40 @@ function load(url) {
         xhr.send();
     });
 };
+function getWordPressMOFile(locale) {
+    return load('http://i18n.svn.wordpress.org/' + locale + '/trunk/messages/' + locale + '.mo');
+}
+
 
 describe('mo', function(){
     describe('#parse()', function(){
-        it('should throw an error for no arguments', function(){
+        it('should throw for no arguments', function(){
             (function(){
                 jedGettextParser.mo.parse();
-            }).should.throw();
+            }).should.throw('First argument must be an ArrayBuffer.');
         })
-        it('should throw an error for a non-ArrayBuffer argument', function(){
+        it('should throw for a non-ArrayBuffer argument', function(){
             (function(){
                 jedGettextParser.mo.parse(new String('bad'));
-            }).should.throw();
+            }).should.throw('First argument must be an ArrayBuffer.');
         })
-        it("should throw an error for an ArrayBuffer that doesn't contain a mo file", function(){
+        it('should throw for an empty ArrayBuffer', function(){
+            (function(){
+                jedGettextParser.mo.parse(new ArrayBuffer(0));
+            }).should.throw('Given ArrayBuffer is empty.');
+        })
+        it("should throw for an ArrayBuffer that doesn't contain a mo file", function(){
             (function(){
                 jedGettextParser.mo.parse(new ArrayBuffer(100));
-            }).should.throw();
+            }).should.throw('Not a gettext binary message catalog file.');
         })
-        it("should throw an error for an ArrayBuffer that is too small to hold an mo file", function(){
+        it("should throw for an ArrayBuffer that is too small to hold an mo file", function(){
             (function(){
-                /* MO files have a 28 byte header, so that's an easy check for minimum file size. */
-                var buffer = ArrayBuffer(20);
-                jedGettextParser.mo.parse(buffer);
+                getWordPressMOFile('zh_CN').then(function(buffer){
+                    /* MO files have a 28 byte header, so that's an easy check for minimum file size. */
+                    buffer = buffer.slice(0, 20);
+                    jedGettextParser.mo.parse(buffer);
+                });
             }).should.throw();
         })
     })

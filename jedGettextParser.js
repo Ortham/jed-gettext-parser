@@ -157,7 +157,11 @@
                 options = options || { domain: 'messages' };
                 options.domain = options.domain || 'messages';
 
-                if (!buffer || typeof buffer != 'arraybuffer') {
+                if (buffer && buffer.byteLength == 0) {
+                    throw new Error('Given ArrayBuffer is empty.');
+                }
+
+                if (!buffer || Object.prototype.toString.call(buffer) != '[object ArrayBuffer]') {
                     throw new Error('First argument must be an ArrayBuffer.');
                 }
 
