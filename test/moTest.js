@@ -62,8 +62,16 @@ describe('getMOFile', function(){
             done();
         });
     })
-    it('should succeed for a present file', function(done){
+    it('should succeed for a present file (zh_CN.mo)', function(done){
         getMOFile('zh_CN').then(function(buffer){
+            buffer.should.be.an.Object;
+            done();
+        }).catch(function(err){
+            done(err);
+        })
+    })
+    it('should succeed for a present file (ru_RU.mo)', function(done){
+        getMOFile('ru_RU').then(function(buffer){
             buffer.should.be.an.Object;
             done();
         }).catch(function(err){
@@ -116,7 +124,7 @@ describe('mo', function(){
                 done();
             }).catch(done);
         })
-        it('should succeed for a valid ArrayBuffer', function(done){
+        it('should succeed for a valid ArrayBuffer (zh_CN)', function(done){
             /* This getMOFile is already tested above. */
             getMOFile('zh_CN').then(function(buffer){
                 (function(){
@@ -139,6 +147,42 @@ describe('mo', function(){
                         null,
                         '链接'
                     ]);
+                }).should.not.throw();
+                done();
+            }).catch(done);
+        })
+        it('should succeed for a valid ArrayBuffer (ru_RU)', function(done){
+            /* This getMOFile is already tested above. */
+            getMOFile('ru_RU').then(function(buffer){
+                (function(){
+                    var locale_data = jedGettextParser.mo.parse(buffer);
+                    locale_data.should.be.an.Object;
+                    locale_data.should.have.property('messages');
+                    locale_data.messages.should.have.property('');
+                    locale_data.messages[''].should.have.properties({
+                        domain: 'messages',
+                        lang: 'ru_RU',
+                        plural_forms: 'nplurals=4; plural=(n==1) ? 0 : (n%10==1 && n%100!=11) ? 3 : ((n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) ? 1 : 2);'
+                    });
+
+                    locale_data.messages.should.have.property('Manage Comments', [
+                        null,
+                        'Управление комментариями'
+                    ]);
+
+                    locale_data.messages.should.have.property('admin bar menu group label\u0004Add New', [
+                        null,
+                        'Добавить'
+                    ]);
+
+                    locale_data.messages.should.have.property('%s comment awaiting moderation', [
+                        null,
+                        '%s комментарий ожидает проверки',
+                        '%s комментария ожидают проверки',
+                        '%s комментариев ожидают проверки',
+                        '%s комментарий ожидает проверки'
+                    ]);
+
                 }).should.not.throw();
                 done();
             }).catch(done);
