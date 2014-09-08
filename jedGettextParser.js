@@ -161,7 +161,7 @@
         try {
             var decoder = new TextDecoder(this._encoding);
         } catch(e) {
-            throw new Error(e.message.split(':')[1].trim());
+            throw new Error("The encoding label provided ('" + this._encoding + "') is invalid.");
         }
 
         /* Now get translations. */
