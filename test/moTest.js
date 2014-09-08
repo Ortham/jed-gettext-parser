@@ -219,5 +219,25 @@ describe('mo', function(){
                 done();
             }).catch(done);
         })
+        it('should provide output accepted by Jed.', function(done){
+            getMOFile('ru_RU').then(function(buffer){
+                (function(){
+                    var opts = {
+                        domain: 'ui'
+                    };
+
+                    var locale_data = jedGettextParser.mo.parse(buffer, opts);
+
+                    var i18n = new Jed({
+                        'locale_data': locale_data,
+                        'domain': 'ui'
+                    });
+
+                    i18n.gettext('Manage Comments').should.equal('Управление комментариями');
+
+                }).should.not.throw();
+                done();
+            }).catch(done);
+        })
     })
 })
