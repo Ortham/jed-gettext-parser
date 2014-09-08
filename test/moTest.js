@@ -1,7 +1,7 @@
 'use strict';
 if ('undefined' != typeof require) {
     /* Node */
-    var jed = require('jed');
+    var Jed = require('jed');
     var jedGettextParser = require('../jedGettextParser');
     var Promise = require('promise');
     var fs = require('fs');
