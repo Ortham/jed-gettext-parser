@@ -19,11 +19,12 @@ Jed doesn't supply Gettext translation file parsers, so this library can act as 
 
 ## Install
 
-Jed Gettext Parser can be loaded as a browser global, an AMD module, or in Node. It requires support for [Typed Arrays](http://caniuse.com/#feat=typedarrays) and the Encoding API.
+Jed Gettext Parser can be loaded as a browser global, an AMD module, or in Node. It requires support for:
 
-The Encoding API is natively supported in Firefox 20 and Chromium 38, and a polyfill is available [here](https://github.com/inexorabletash/text-encoding). For Node, npm will automatically handle the polyfill as a dependency.
+* [Typed Arrays](http://caniuse.com/#feat=typedarrays) ([polyfill](https://github.com/inexorabletash/polyfill/blob/master/typedarray.js))
+* Encoding API: Natively supported in Firefox 20 and Chromium 38, and a polyfill is available [here](https://github.com/inexorabletash/text-encoding). For Node, npm will automatically handle the polyfill as a dependency.
 
-### Browser Global
+##### Browser Global
 
 ```
 <script src="jedGettextParser.js"></script>
@@ -32,7 +33,7 @@ The Encoding API is natively supported in Firefox 20 and Chromium 38, and a poly
 </script>
 ```
 
-### AMD Module
+##### AMD Module
 
 ```
 require(['jedGettextParser'], function(jedGettextParser) {
@@ -40,7 +41,7 @@ require(['jedGettextParser'], function(jedGettextParser) {
 });
 ```
 
-### Node
+##### Node
 
 Jed Gettext Parser isn't yet published, so download and extract its source archive first.
 
@@ -70,6 +71,8 @@ var i18n = new Jed({
     'domain': 'messages'
 });
 ```
+
+#### API
     
 The library currently exposes only one function:
 
