@@ -23,6 +23,15 @@
         "grunt-contrib-connect": "~0.8",
         "grunt-contrib-watch": "~0.6"
     },
+    "keywords": [
+        "internationalisation",
+        "localisation",
+        "i18n",
+        "l10n",
+        "gettext",
+        "mo",
+        "Jed"
+    ],
     "scripts": {
         "test": "grunt test"
     },
