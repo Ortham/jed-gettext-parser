@@ -6,10 +6,6 @@ module.exports = function(grunt) {
     }, {
         browserName: "chrome",
         platform: "Windows 7",
-        version: "beta"
-    }, {
-        browserName: "chrome",
-        platform: "Windows 7",
         version: "35"
     }, {
         browserName: "chrome",
@@ -17,15 +13,12 @@ module.exports = function(grunt) {
         version: "36"
     }, {
         browserName: "chrome",
-        platform: "Windows 7"
-    }, {
-        browserName: "internet explorer",
         platform: "Windows 7",
-        version: "8"
+        version: "37"
     }, {
-        browserName: "internet explorer",
+        browserName: "chrome",
         platform: "Windows 7",
-        version: "9"
+        version: "beta"
     }, {
         browserName: "internet explorer",
         platform: "Windows 7",
@@ -38,6 +31,22 @@ module.exports = function(grunt) {
         browserName: "safari",
         platform: "OS X 10.9",
         version: "7"
+    }, {
+        browserName: "iphone",
+        platform: "OS X 10.9",
+        version: "7.1"
+    }, {
+        browserName: "android",
+        platform: "Linux",
+        version: "4.1"
+    }, {
+        browserName: "android",
+        platform: "Linux",
+        version: "4.3"
+    }, {
+        browserName: "android",
+        platform: "Linux",
+        version: "4.4"
     }];
 
     grunt.initConfig({
