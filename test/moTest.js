@@ -2,7 +2,7 @@
 if ('undefined' != typeof require) {
     /* Node */
     var Jed = require('jed');
-    var jedGettextParser = require('../jedGettextParser');
+    var jedGettextParser = require('..');
     var Promise = require('promise');
     var fs = require('fs');
 }
