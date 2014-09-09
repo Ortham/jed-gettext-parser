@@ -71,54 +71,66 @@ describe('loadLocalFile', function(){
 
 describe('mo', function(){
     describe('#parse()', function(){
-        it('should throw for no arguments', function(){
-            (function(){
-                jedGettextParser.mo.parse();
-            }).should.throw('First argument must be an ArrayBuffer.');
-        })
-        it('should throw for a non-ArrayBuffer argument', function(){
-            (function(){
-                jedGettextParser.mo.parse(new String('bad'));
-            }).should.throw('First argument must be an ArrayBuffer.');
-        })
-        it('should throw for an empty ArrayBuffer', function(){
-            (function(){
-                jedGettextParser.mo.parse(new ArrayBuffer(0));
-            }).should.throw('Given ArrayBuffer is empty.');
-        })
-        it('should throw for an ArrayBuffer that does not contain a mo file', function(){
-            (function(){
-                jedGettextParser.mo.parse(new ArrayBuffer(100));
-            }).should.throw('Not a gettext binary message catalog file.');
-        })
-        it('should throw for an ArrayBuffer that is too small to hold an mo file', function(done){
-            /* This loadLocalFile is already tested above. */
-            loadLocalFile('ru_RU.mo').then(function(buffer){
+        describe('invalid input data tests', function(){
+            it('should throw for no arguments', function(){
                 (function(){
-                    /* MO files have a 28 byte header, so that's an easy check for minimum file size. */
-                    buffer = buffer.slice(0, 20);
-                    jedGettextParser.mo.parse(buffer);
-                }).should.throw('The given ArrayBuffer is too small to hold a valid .mo file.');
-                done();
-            }).catch(done);
-        })
-        it('should throw for an ArrayBuffer that holds an incomplete mo file', function(done){
-            /* This loadLocalFile is already tested above. */
-            loadLocalFile('ru_RU.mo').then(function(buffer){
+                    jedGettextParser.mo.parse();
+                }).should.throw('First argument must be an ArrayBuffer.');
+            })
+            it('should throw for a non-ArrayBuffer argument', function(){
                 (function(){
-                    /* Cut the end off the file. */
-                    buffer = buffer.slice(0, buffer.byteLength - 20);
-                    jedGettextParser.mo.parse(buffer);
-                }).should.throw('The given ArrayBuffer data is corrupt or incomplete.');
-                done();
-            }).catch(done);
+                    jedGettextParser.mo.parse(new String('bad'));
+                }).should.throw('First argument must be an ArrayBuffer.');
+            })
+            it('should throw for an empty ArrayBuffer', function(){
+                (function(){
+                    jedGettextParser.mo.parse(new ArrayBuffer(0));
+                }).should.throw('Given ArrayBuffer is empty.');
+            })
+            it('should throw for an ArrayBuffer that does not contain a mo file', function(){
+                (function(){
+                    jedGettextParser.mo.parse(new ArrayBuffer(100));
+                }).should.throw('Not a gettext binary message catalog file.');
+            })
         })
 
-        it('should succeed for a valid ArrayBuffer with contexts and plurals', function(done){
-            /* This loadLocalFile is already tested above. */
-            loadLocalFile('ru_RU.mo').then(function(buffer){
+        describe('mangled input data tests', function(){
+            var moArrayBuffer;
+            beforeEach(function(done){
+                loadLocalFile('ru_RU.mo').then(function(buffer){
+                    moArrayBuffer = buffer;
+                    done();
+                }).catch(done);
+            })
+
+            it('should throw for an ArrayBuffer that is too small to hold an mo file', function(){
                 (function(){
-                    var locale_data = jedGettextParser.mo.parse(buffer);
+                    /* MO files have a 28 byte header, so that's an easy check for minimum file size. */
+                    moArrayBuffer = moArrayBuffer.slice(0, 20);
+                    jedGettextParser.mo.parse(moArrayBuffer);
+                }).should.throw('The given ArrayBuffer is too small to hold a valid .mo file.');
+            })
+            it('should throw for an ArrayBuffer that holds an incomplete mo file', function(){
+                (function(){
+                    /* Cut the end off the file. */
+                    moArrayBuffer = moArrayBuffer.slice(0, moArrayBuffer.byteLength - 20);
+                    jedGettextParser.mo.parse(moArrayBuffer);
+                }).should.throw('The given ArrayBuffer data is corrupt or incomplete.');
+            })
+        })
+
+        describe('valid UTF-8 input data tests', function(){
+            var moArrayBuffer;
+            before(function(done){
+                loadLocalFile('ru_RU.mo').then(function(buffer){
+                    moArrayBuffer = buffer;
+                    done();
+                }).catch(done);
+            })
+
+            it('should succeed for a valid ArrayBuffer with contexts and plurals', function(){
+                (function(){
+                    var locale_data = jedGettextParser.mo.parse(moArrayBuffer);
                     locale_data.should.be.an.Object;
                     locale_data.should.have.property('messages');
                     locale_data.messages.should.have.property('');
@@ -147,17 +159,14 @@ describe('mo', function(){
                     ]);
 
                 }).should.not.throw();
-                done();
-            }).catch(done);
-        })
-        it('should successfully load under a non-default domain', function(done){
-            loadLocalFile('ru_RU.mo').then(function(buffer){
+            })
+            it('should successfully load under a non-default domain', function(){
                 (function(){
                     var opts = {
                         domain: 'ui'
                     };
 
-                    var locale_data = jedGettextParser.mo.parse(buffer, opts);
+                    var locale_data = jedGettextParser.mo.parse(moArrayBuffer, opts);
                     locale_data.should.be.an.Object;
                     locale_data.should.have.property('ui');
                     locale_data.ui.should.have.property('');
@@ -173,17 +182,14 @@ describe('mo', function(){
                     ]);
 
                 }).should.not.throw();
-                done();
-            }).catch(done);
-        })
-        it('should accept a valid encoding option', function(done){
-            loadLocalFile('ru_RU.mo').then(function(buffer){
+            })
+            it('should accept a valid encoding option', function(){
                 (function(){
                     var opts = {
                         encoding: 'windows-1252'
                     };
 
-                    var locale_data = jedGettextParser.mo.parse(buffer, opts);
+                    var locale_data = jedGettextParser.mo.parse(moArrayBuffer, opts);
                     locale_data.should.be.an.Object;
                     locale_data.should.have.property('messages');
                     locale_data.messages.should.have.property('');
@@ -200,47 +206,23 @@ describe('mo', function(){
                     ]);
 
                 }).should.not.throw();
-                done();
-            }).catch(done);
-        })
-        it('should throw for an invalid encoding option', function(done){
-            loadLocalFile('ru_RU.mo').then(function(buffer){
+            })
+            it('should throw for an invalid encoding option', function(){
                 (function(){
                     var opts = {
                         encoding: 'fake-encoding'
                     };
-
-                    var locale_data = jedGettextParser.mo.parse(buffer, opts);
+                    jedGettextParser.mo.parse(moArrayBuffer, opts);
 
                 }).should.throw("The encoding label provided ('fake-encoding') is invalid.");
-                done();
-            }).catch(done);
-        })
-        it('should be able to decode mo files encoded in Windows-1251', function(done){
-            loadLocalFile('ru_RU_cp1251.mo').then(function(buffer){
-                (function(){
-
-                    var locale_data = jedGettextParser.mo.parse(buffer);
-                    locale_data.should.be.an.Object;
-                    locale_data.should.have.property('messages');
-
-                    locale_data.messages.should.have.property('Manage Comments', [
-                        null,
-                        'Управление комментариями'
-                    ]);
-
-                }).should.not.throw();
-                done();
-            }).catch(done);
-        })
-        it('should provide output accepted by Jed.', function(done){
-            loadLocalFile('ru_RU.mo').then(function(buffer){
+            })
+            it('should provide output accepted by Jed.', function(){
                 (function(){
                     var opts = {
                         domain: 'ui'
                     };
 
-                    var locale_data = jedGettextParser.mo.parse(buffer, opts);
+                    var locale_data = jedGettextParser.mo.parse(moArrayBuffer, opts);
 
                     var i18n = new Jed({
                         'locale_data': locale_data,
@@ -250,8 +232,32 @@ describe('mo', function(){
                     i18n.gettext('Manage Comments').should.equal('Управление комментариями');
 
                 }).should.not.throw();
-                done();
-            }).catch(done);
+            })
+        })
+
+        describe('valid non-UTF-8 input data tests', function(){
+            var moArrayBuffer;
+            before(function(done){
+                loadLocalFile('ru_RU_cp1251.mo').then(function(buffer){
+                    moArrayBuffer = buffer;
+                    done();
+                }).catch(done);
+            })
+
+            it('should be able to decode mo files encoded in Windows-1251', function(){
+                (function(){
+
+                    var locale_data = jedGettextParser.mo.parse(moArrayBuffer);
+                    locale_data.should.be.an.Object;
+                    locale_data.should.have.property('messages');
+
+                    locale_data.messages.should.have.property('Manage Comments', [
+                        null,
+                        'Управление комментариями'
+                    ]);
+
+                }).should.not.throw();
+            })
         })
     })
 })
