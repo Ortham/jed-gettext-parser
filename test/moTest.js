@@ -7,12 +7,15 @@ if ('undefined' != typeof require) {
     var fs = require('fs');
 }
 
-function load(url) {
+function loadLocalFile(file) {
+    if (!file) {
+        throw new Error('No locale is given.');
+    }
     return new Promise(function(resolve, reject){
         if (typeof XMLHttpRequest != "undefined") {
             /* Browser */
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', url);
+            xhr.open('GET', file);
             xhr.responseType = 'arraybuffer';
             xhr.addEventListener('readystatechange', function(evt){
                 if (evt.target.readyState == 4) {
@@ -26,7 +29,7 @@ function load(url) {
             }, false);
             xhr.send();
         } else {
-            fs.readFile(url, function(err, data){
+            fs.readFile(file, function(err, data){
                 if (err) {
                     reject(err);
                 } else {
@@ -42,28 +45,22 @@ function load(url) {
         }
     });
 };
-function getMOFile(locale) {
-    if (!locale) {
-        throw new Error('No locale is given.');
-    }
-    return load(locale + '.mo');
-}
 
-describe('getMOFile', function(){
+describe('loadLocalFile', function(){
     it('should throw for no argument', function(){
         (function(){
-            getMOFile();
+            loadLocalFile();
         }).should.throw('No locale is given.');
     })
     it('should reject for missing file', function(done){
-        getMOFile('missing').then(function(buffer){
+        loadLocalFile('missing.mo').then(function(buffer){
             done(new Error('Function should not have succeeded.'));
         }).catch(function(err){
             done();
         });
     })
-    it('should succeed for a present file (ru_RU)', function(done){
-        getMOFile('ru_RU').then(function(buffer){
+    it('should succeed for a present file (ru_RU.mo)', function(done){
+        loadLocalFile('ru_RU.mo').then(function(buffer){
             buffer.should.be.an.Object;
             done();
         }).catch(function(err){
@@ -95,8 +92,8 @@ describe('mo', function(){
             }).should.throw('Not a gettext binary message catalog file.');
         })
         it('should throw for an ArrayBuffer that is too small to hold an mo file', function(done){
-            /* This getMOFile is already tested above. */
-            getMOFile('ru_RU').then(function(buffer){
+            /* This loadLocalFile is already tested above. */
+            loadLocalFile('ru_RU.mo').then(function(buffer){
                 (function(){
                     /* MO files have a 28 byte header, so that's an easy check for minimum file size. */
                     buffer = buffer.slice(0, 20);
@@ -106,8 +103,8 @@ describe('mo', function(){
             }).catch(done);
         })
         it('should throw for an ArrayBuffer that holds an incomplete mo file', function(done){
-            /* This getMOFile is already tested above. */
-            getMOFile('ru_RU').then(function(buffer){
+            /* This loadLocalFile is already tested above. */
+            loadLocalFile('ru_RU.mo').then(function(buffer){
                 (function(){
                     /* Cut the end off the file. */
                     buffer = buffer.slice(0, buffer.byteLength - 20);
@@ -118,8 +115,8 @@ describe('mo', function(){
         })
 
         it('should succeed for a valid ArrayBuffer with contexts and plurals', function(done){
-            /* This getMOFile is already tested above. */
-            getMOFile('ru_RU').then(function(buffer){
+            /* This loadLocalFile is already tested above. */
+            loadLocalFile('ru_RU.mo').then(function(buffer){
                 (function(){
                     var locale_data = jedGettextParser.mo.parse(buffer);
                     locale_data.should.be.an.Object;
@@ -154,7 +151,7 @@ describe('mo', function(){
             }).catch(done);
         })
         it('should successfully load under a non-default domain', function(done){
-            getMOFile('ru_RU').then(function(buffer){
+            loadLocalFile('ru_RU.mo').then(function(buffer){
                 (function(){
                     var opts = {
                         domain: 'ui'
@@ -180,7 +177,7 @@ describe('mo', function(){
             }).catch(done);
         })
         it('should accept a valid encoding option', function(done){
-            getMOFile('ru_RU').then(function(buffer){
+            loadLocalFile('ru_RU.mo').then(function(buffer){
                 (function(){
                     var opts = {
                         encoding: 'windows-1252'
@@ -207,7 +204,7 @@ describe('mo', function(){
             }).catch(done);
         })
         it('should throw for an invalid encoding option', function(done){
-            getMOFile('ru_RU').then(function(buffer){
+            loadLocalFile('ru_RU.mo').then(function(buffer){
                 (function(){
                     var opts = {
                         encoding: 'fake-encoding'
@@ -220,7 +217,7 @@ describe('mo', function(){
             }).catch(done);
         })
         it('should be able to decode mo files encoded in Windows-1251', function(done){
-            getMOFile('ru_RU_cp1251').then(function(buffer){
+            loadLocalFile('ru_RU_cp1251.mo').then(function(buffer){
                 (function(){
 
                     var locale_data = jedGettextParser.mo.parse(buffer);
@@ -237,7 +234,7 @@ describe('mo', function(){
             }).catch(done);
         })
         it('should provide output accepted by Jed.', function(done){
-            getMOFile('ru_RU').then(function(buffer){
+            loadLocalFile('ru_RU.mo').then(function(buffer){
                 (function(){
                     var opts = {
                         domain: 'ui'
