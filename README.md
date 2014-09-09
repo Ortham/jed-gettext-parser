@@ -45,10 +45,8 @@ require(['jedGettextParser'], function(jedGettextParser) {
 
 ##### Node
 
-Jed Gettext Parser isn't yet published, so download and extract its source archive first.
-
 ```
-npm install ./path/to/jed-gettext-parser
+npm install jed-gettext-parser
 ```
 
 ```
