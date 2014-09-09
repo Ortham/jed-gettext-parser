@@ -45,6 +45,15 @@ function loadLocalFile(file) {
         }
     });
 };
+function shortenBuffer(buffer, newLength) {
+    /* IE doesn't support ArrayBuffer.slice()! */
+    var outView = new Uint8Array(newLength);
+    var inView = new Uint8Array(buffer, 0, newLength);
+    for (var i = 0; i < inView.length; ++i) {
+        outView[i] = inView[i];
+    }
+    return outView.buffer;
+}
 
 describe('loadLocalFile', function(){
     it('should throw for no argument', function(){
@@ -103,15 +112,16 @@ describe('mo', function(){
 
             it('should throw for an ArrayBuffer that is too small to hold an mo file', function(){
                 (function(){
-                    /* MO files have a 28 byte header, so that's an easy check for minimum file size. */
-                    moArrayBuffer = moArrayBuffer.slice(0, 20);
+                    /* MO files have a 28 byte header, so that's an easy check
+                       for minimum file size. */
+                    moArrayBuffer = shortenBuffer(moArrayBuffer, 20);
                     jedGettextParser.mo.parse(moArrayBuffer);
                 }).should.throw('The given ArrayBuffer is too small to hold a valid .mo file.');
             })
             it('should throw for an ArrayBuffer that holds an incomplete mo file', function(){
                 (function(){
                     /* Cut the end off the file. */
-                    moArrayBuffer = moArrayBuffer.slice(0, moArrayBuffer.byteLength - 20);
+                    moArrayBuffer = shortenBuffer(moArrayBuffer, moArrayBuffer.byteLength - 20);
                     jedGettextParser.mo.parse(moArrayBuffer);
                 }).should.throw('The given ArrayBuffer data is corrupt or incomplete.');
             })
