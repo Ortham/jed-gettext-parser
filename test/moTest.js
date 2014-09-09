@@ -55,7 +55,7 @@ describe('loadLocalFile', function(){
     it('should reject for missing file', function(done){
         loadLocalFile('missing.mo').then(function(buffer){
             done(new Error('Function should not have succeeded.'));
-        }).catch(function(err){
+        }, function(err){
             done();
         });
     })
@@ -63,9 +63,7 @@ describe('loadLocalFile', function(){
         loadLocalFile('ru_RU.mo').then(function(buffer){
             buffer.should.be.an.Object;
             done();
-        }).catch(function(err){
-            done(err);
-        })
+        }, done);
     })
 })
 
@@ -100,7 +98,7 @@ describe('mo', function(){
                 loadLocalFile('ru_RU.mo').then(function(buffer){
                     moArrayBuffer = buffer;
                     done();
-                }).catch(done);
+                }, done);
             })
 
             it('should throw for an ArrayBuffer that is too small to hold an mo file', function(){
@@ -125,7 +123,7 @@ describe('mo', function(){
                 loadLocalFile('ru_RU.mo').then(function(buffer){
                     moArrayBuffer = buffer;
                     done();
-                }).catch(done);
+                }, done);
             })
 
             it('should succeed for a valid ArrayBuffer with contexts and plurals', function(){
@@ -241,7 +239,7 @@ describe('mo', function(){
                 loadLocalFile('ru_RU_cp1251.mo').then(function(buffer){
                     moArrayBuffer = buffer;
                     done();
-                }).catch(done);
+                }, done);
             })
 
             it('should be able to decode mo files encoded in Windows-1251', function(){
