@@ -7,7 +7,7 @@ JavaScript Gettext `.mo` file parsing for [Jed](https://github.com/slexaxton/Jed
 
 ## Introduction
 
-[Gettext](https://www.gnu.org/software/gettext/) is an old translation standard with implementations in many languages. It's one that programmers and translators are likely to be familiar with.
+[Gettext](https://www.gnu.org/software/gettext/) is an old translation standard with implementations in many languages. It's one that localisation-aware programmers and translators are likely to be familiar with.
 
 [Jed](https://github.com/slexaxton/Jed/) provides a very nice interface for translation using Gettext in Javascript.
 
@@ -15,26 +15,51 @@ Jed doesn't supply Gettext translation file parsers, so this library can act as 
 
 *Note: Jed Gettext Parser is made to work with Jed, but is a third-party library. Please direct any support queries to this repository's issue tracker, and [the author](https://github.com/WrinklyNinja).*
 
-## Requirements
+## Install
 
-Jed Gettext Parser uses some fairly recent Javascript features:
+Jed Gettext Parser can be loaded as a browser global, an AMD module, or in Node. It requires support for [Typed Arrays](http://caniuse.com/#feat=typedarrays) and the Encoding API.
 
-* [Typed Arrays](http://caniuse.com/#feat=typedarrays)
-* The Encoding API (available in Firefox 20 and Chromium 38: a polyfill can be found [here](https://github.com/inexorabletash/text-encoding))
-
-## Usage
-
-Jed Gettext Parser can be loaded as a browser global or an AMD module.
+The Encoding API is natively supported in Firefox 20 and Chromium 38, and a polyfill is available [here](https://github.com/inexorabletash/text-encoding). For Node, npm will automatically handle the polyfill as a dependency.
 
 ### Browser Global
 
 ```
 <script src="jedGettextParser.js"></script>
 <script>
-var moBuffer;  // An ArrayBuffer.
+// Use jedGettextParser
+</script>
+```
+
+### AMD Module
+
+```
+require(['jedGettextParser'], function(jedGettextParser) {
+    // Use jedGettextParser
+});
+```
+
+### Node
+
+Jed Gettext Parser isn't yet published, so download and extract its source archive first.
+
+```
+npm install ./path/to/jed-gettext-parser
+```
+
+```
+var jedGettextParser = require('jed-gettext-parser');
+// Use jedGettextParser
+```
+
+## Usage
+
+Once you've loaded Jed and Jed Gettext Parser, they can can be used together:
+
+```
+var moBuffer = new ArrayBuffer();
 // Fill the moBuffer with the contents of a .mo file in whatever way you like.
 
-// messages is an object holding locale data as expected by Jed.
+// locale_data is an object holding locale data as expected by Jed.
 var locale_data = jedGettextParser.mo.parse(moBuffer);
 
 // Now load using Jed.
@@ -42,36 +67,19 @@ var i18n = new Jed({
     'locale_data': locale_data,
     'domain': 'messages'
 });
-</script>
 ```
-
-### AMD Module
-
-```
-require(['jedGettextParser', 'jed'], function(jedGettextParser, Jed) {
-    var moBuffer;  // An ArrayBuffer.
-    // Fill the moBuffer with the contents of a .mo file in whatever way you like.
-
-    // messages is an object holding locale data as expected by Jed.
-    var locale_data = jedGettextParser.mo.parse(moBuffer);
-
-    // Now load using Jed.
-    var i18n = new Jed({
-        'locale_data': locale_data,
-        'domain': 'messages'
-    });
-});
-```
-
-## Usage
-
+    
 The library currently exposes only one function:
 
 ```
-var data = jedGettextParser.mo.parse(buffer, options);
+var data = jedGettextParser.mo.parse(buffer[, options]);
 ```
 
-`data` is an object that can be used as the value of Jed's `locale_data` initialisation option. The `buffer` argument is an `ArrayBuffer` object that holds the contents of the `.mo` file to parse. The `options` argument is an object with the following members (default values given):
+* `data`: an object that can be used as the value of Jed's `locale_data` initialisation option.
+* `buffer`: an `ArrayBuffer` object that holds the contents of the `.mo` file to parse.
+* `options`: an object that can be optionally provided to specify some settings.
+
+The `options` object has the following structure (default values given):
 
 ```
 var options = {
@@ -80,7 +88,10 @@ var options = {
 }
 ```
 
-If `options.encoding` is undefined, the encoding given in the `.mo` file will be used to interpret the string data. Otherwise, valid values are identical to those accepted by the [TextDecoder constructor](https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder.TextDecoder#Parameters) for its first parameter.
+* `encoding`: The encoding to use when reading the `.mo` file. If undefined, the encoding given in the `.mo` file will be used. Otherwise, valid values are those given in the [Encoding API specification](http://encoding.spec.whatwg.org/#names-and-labels).
+* `domain`: The domain under which the translation data should be stored.
+
+If an issue is encountered during parsing, an `Error` object describing the problem will be thrown.
 
 ## Motivation
 
