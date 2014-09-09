@@ -1,9 +1,11 @@
 Jed Gettext Parser
 ==================
 
+JavaScript Gettext `.mo` file parsing for [Jed](https://github.com/slexaxton/Jed/).
+
 [![Build Status](https://travis-ci.org/WrinklyNinja/jed-gettext-parser.svg?branch=master)](https://travis-ci.org/WrinklyNinja/jed-gettext-parser)
 
-JavaScript Gettext `.mo` file parsing for [Jed](https://github.com/slexaxton/Jed/).
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/oliverhamlet.svg)](https://saucelabs.com/u/oliverhamlet)
 
 ## Introduction
 

@@ -2,8 +2,19 @@ language: node_js
 node_js:
   - "0.10"
 
+before_script:
+  - npm install -g grunt-cli
+
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y gettext-base
   - chmod +x ./test/get-files.sh
   - ./test/get-files.sh
+
+addons:
+  sauce_connect: true
+
+env:
+  global:
+    - secure: SaSkwu40dGTkNOPJzZq1Uwx4B/yjvSaDJRCe8v3H3Efr9A+1M8dp4mX4kl1bi158f2DOAIPfNnmabQp79gbweFyM1DHn7hvUi+mwWlgyTn+tVpWVLbxxOpn4DhNNLUjGcahBDrvoqkQZba1mAr+pW+Rph9iW7EWYa/1yJPWT0Nc=
+    - secure: ewiRSXYf4829cF4plGIksJXv9sSGA+0uocQFxwwNrhEd67JxnCCnJmCE2VoOL4YnTYC9sQcB9o3SeESTksm6Nvp0cNQaQKzLya2VzcU6WyBi1gurhWpjuJXMo16+sSkWQ+b8xSdlR9xEEvOTVhYKaK94CihBF0b18hYItmD5Rf0=

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<title>Mocha Tests</title>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="mocha.css" />
+</head>
+<body>
+  <div id="mocha"></div>
+  <script src="jed.js"></script>
+  <script src="should.min.js"></script>
+  <script src="encoding-indexes.js"></script>
+  <script src="encoding.js"></script>
+  <script src="promise-1.0.0.min.js"></script>
+  <script src="../../jedGettextParser.js"></script>
+  <script src="mocha.js"></script>
+  <script>mocha.setup('bdd')</script>
+  <script src="../moTest.js"></script>
+  <script>
+  onload = function(){
+    var runner = mocha.run();
+
+    var failedTests = [];
+    runner.on('end', function(){
+      window.mochaResults = runner.stats;
+      window.mochaResults.reports = failedTests;
+    });
+
+    runner.on('fail', logFailure);
+
+    function logFailure(test, err){
+
+      var flattenTitles = function(test){
+        var titles = [];
+        while (test.parent.title){
+          titles.push(test.parent.title);
+          test = test.parent;
+        }
+        return titles.reverse();
+      };
+
+      failedTests.push({name: test.title, result: false, message: err.message, stack: err.stack, titles: flattenTitles(test) });
+    };
+  };
+</script>
+</body>
+</html>
