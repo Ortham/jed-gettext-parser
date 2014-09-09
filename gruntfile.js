@@ -58,6 +58,17 @@ module.exports = function(grunt) {
                 }
             }
         },
+        mochaTest: {
+            test: {
+                options: {
+                    require: 'should',
+                    ui: 'bdd',
+                    mocha: require('mocha'),
+                    clearRequireCache: true
+                },
+                src: ['test/moTest.js']
+            }
+        },
         'saucelabs-mocha': {
             all: {
                 options: {
@@ -79,5 +90,5 @@ module.exports = function(grunt) {
     }
 
     grunt.registerTask("dev", ["connect", "watch"]);
-    grunt.registerTask("test", ["connect", "saucelabs-mocha"]);
+    grunt.registerTask("test", ["mochaTest", "connect", "saucelabs-mocha"]);
 };
