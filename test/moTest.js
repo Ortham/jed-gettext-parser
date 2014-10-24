@@ -149,17 +149,14 @@ describe('mo', function(){
                     });
 
                     locale_data.messages.should.have.property('Manage Comments', [
-                        null,
                         'Управление комментариями'
                     ]);
 
                     locale_data.messages.should.have.property('admin bar menu group label\u0004Add New', [
-                        null,
                         'Добавить'
                     ]);
 
                     locale_data.messages.should.have.property('%s comment awaiting moderation', [
-                        null,
                         '%s комментарий ожидает проверки',
                         '%s комментария ожидают проверки',
                         '%s комментариев ожидают проверки',
@@ -185,7 +182,6 @@ describe('mo', function(){
                     });
 
                     locale_data.ui.should.have.property('Manage Comments', [
-                        null,
                         'Управление комментариями'
                     ]);
 
@@ -209,7 +205,6 @@ describe('mo', function(){
 
                     /* String gets mangled because it's the wrong encoding. */
                     locale_data.messages.should.have.property('Manage Comments', [
-                        null,
                         'Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ ÐºÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ð°Ñ€Ð¸ÑÐ¼Ð¸'
                     ]);
 
@@ -260,7 +255,6 @@ describe('mo', function(){
                     locale_data.should.have.property('messages');
 
                     locale_data.messages.should.have.property('Manage Comments', [
-                        null,
                         'Управление комментариями'
                     ]);
 
