@@ -213,3 +213,20 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+
+#############
+## Misc
+#############
+
+# Node modules
+node_modules
+
+# Testing files
+test/browser/should.min.js
+test/browser/jed.js
+test/browser/encoding.js
+test/browser/encoding-indexes.js
+test/browser/promise-1.0.0.min.js
+test/browser/mocha.css
+test/browser/mocha.js
