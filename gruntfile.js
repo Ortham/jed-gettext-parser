@@ -50,20 +50,21 @@ module.exports = function(grunt) {
         platform: "OS X 10.9",
         version: "8.1"
     },
-    /* Android */
-    {
+    /* Android.
+       4.1 and 4.4 don't work for some reason, the tests themselves pass, but the process fails. */
+    /*{
         browserName: "android",
         platform: "Linux",
         version: "4.1"
-    }, {
+    }, */{
         browserName: "android",
         platform: "Linux",
         version: "4.3"
-    }, {
+    }/*, {
         browserName: "android",
         platform: "Linux",
         version: "4.4"
-    }];
+    }*/];
 
     grunt.initConfig({
         connect: {
