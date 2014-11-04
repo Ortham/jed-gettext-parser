@@ -51,16 +51,16 @@ module.exports = function(grunt) {
         version: "8.1"
     },
     /* Android.
-       4.1 and 4.4 don't work for some reason, the tests themselves pass, but the process fails. */
-    /*{
+       4.3 and 4.4 don't work for some reason, the tests themselves pass, but the process just completes with no pass or fail. */
+    {
         browserName: "android",
         platform: "Linux",
         version: "4.1"
-    }, */{
+    }/*, {
         browserName: "android",
         platform: "Linux",
         version: "4.3"
-    }/*, {
+    }, {
         browserName: "android",
         platform: "Linux",
         version: "4.4"
