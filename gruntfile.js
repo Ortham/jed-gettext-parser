@@ -1,13 +1,29 @@
 module.exports = function(grunt) {
-    var browsers = [{
+    /* Test browsers with > 1% usage. */
+    var browsers = [
+    /* Internet Explorer.
+       8 and 9 don't work for some reason, can't tell why. */
+    {
+        browserName: "internet explorer",
+        platform: "Windows 7",
+        version: "10"
+    }, {
+        browserName: "internet explorer",
+        platform: "Windows 7",
+        version: "11"
+    },
+    /* Firefox */
+    {
         browserName: "firefox",
-        version: "31",
+        version: "32",
         platform: "Windows 7"
     }, {
-        browserName: "chrome",
-        platform: "Windows 7",
-        version: "35"
-    }, {
+        browserName: "firefox",
+        version: "33",
+        platform: "Windows 7"
+    },
+    /* Chrome */
+    {
         browserName: "chrome",
         platform: "Windows 7",
         version: "36"
@@ -18,24 +34,24 @@ module.exports = function(grunt) {
     }, {
         browserName: "chrome",
         platform: "Windows 7",
-        version: "beta"
-    }, {
-        browserName: "internet explorer",
-        platform: "Windows 7",
-        version: "10"
-    }, {
-        browserName: "internet explorer",
-        platform: "Windows 7",
-        version: "11"
-    }, {
-        browserName: "safari",
-        platform: "OS X 10.9",
-        version: "7"
-    }, {
+        version: "38"
+    },
+    /* iOS */
+    {
         browserName: "iphone",
         platform: "OS X 10.9",
         version: "7.1"
     }, {
+        browserName: "iphone",
+        platform: "OS X 10.9",
+        version: "8"
+    }, {
+        browserName: "iphone",
+        platform: "OS X 10.9",
+        version: "8.1"
+    },
+    /* Android */
+    {
         browserName: "android",
         platform: "Linux",
         version: "4.1"
