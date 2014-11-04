@@ -16,7 +16,7 @@ done
 # Get Mocha, Jed, should.js and Encoding API and Promises polyfills for browser
 # tests.
 wget -P test/browser https://raw.githubusercontent.com/shouldjs/should.js/4.0.4/should.min.js
-wget -P test/browser https://raw.githubusercontent.com/Sinewyk/Jed/no_0_index/jed.js
+wget -P test/browser https://raw.githubusercontent.com/SlexAxton/Jed/1.1.0/jed.js
 wget -P test/browser https://raw.githubusercontent.com/inexorabletash/text-encoding/v0.1.0/lib/encoding.js
 wget -P test/browser https://raw.githubusercontent.com/inexorabletash/text-encoding/v0.1.0/lib/encoding-indexes.js
 wget -P test/browser http://s3.amazonaws.com/es6-promises/promise-1.0.0.min.js

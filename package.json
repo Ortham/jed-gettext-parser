@@ -14,7 +14,7 @@
     "devDependencies": {
         "mocha": "~1.21",
         "should": "~4.0",
-        "jed": "git+https://git@github.com/Sinewyk/Jed.git#no_0_index",
+        "jed": "1.1.0",
         "promise": "6.0.0",
         "grunt": "~0.4.5",
         "grunt-mocha-test": "~0.11",
