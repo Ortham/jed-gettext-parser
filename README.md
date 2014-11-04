@@ -3,7 +3,7 @@ Jed Gettext Parser
 
 JavaScript Gettext `.mo` file parsing for [Jed](https://github.com/slexaxton/Jed/).
 
-[![Build Status](https://travis-ci.org/WrinklyNinja/jed-gettext-parser.svg?branch=master)](https://travis-ci.org/WrinklyNinja/jed-gettext-parser)
+[![Build Status](https://travis-ci.org/WrinklyNinja/jed-gettext-parser.svg?branch=v1.0.0)](https://travis-ci.org/WrinklyNinja/jed-gettext-parser)
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/oliverhamlet.svg)](https://saucelabs.com/u/oliverhamlet)
 
@@ -22,7 +22,7 @@ Jed doesn't supply Gettext translation file parsers, so this library can act as 
 Jed Gettext Parser can be loaded as a browser global, an AMD module, or in Node. It requires support for:
 
 * [Typed Arrays](http://caniuse.com/#feat=typedarrays) ([polyfill](https://github.com/inexorabletash/polyfill/blob/master/typedarray.js))
-* Encoding API: Natively supported in Firefox 20 and Chromium 38, polyfill [here](https://github.com/inexorabletash/text-encoding). 
+* Encoding API: Natively supported in Firefox 20 and Chromium 38, polyfill [here](https://github.com/inexorabletash/text-encoding).
 
 Node supports Typed Arrays, and npm will automatically handle the Encoding API polyfill as a dependency.
 
@@ -73,7 +73,7 @@ var i18n = new Jed({
 ```
 
 #### API
-    
+
 The library currently exposes only one function:
 
 ```
