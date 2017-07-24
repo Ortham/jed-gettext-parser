@@ -57,7 +57,7 @@ module.exports = function(grunt) {
                 options: {
                     urls: ["http://127.0.0.1:9999/test/browser/index.html"],
                     build: process.env.TRAVIS_JOB_ID,
-                    throttled: 3,
+                    throttled: 5,
                     browsers: browsers,
                     testname: "mocha tests",
                     tags: ["master"]
