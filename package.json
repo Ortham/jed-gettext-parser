@@ -15,7 +15,7 @@
         "mocha": "~1.21",
         "should": "~4.0",
         "jed": "1.1.0",
-        "promise": "6.0.0",
+        "es6-promise": "4.1.1",
         "grunt": "~0.4.5",
         "grunt-mocha-test": "~0.11",
         "grunt-cli": "~0.1",
