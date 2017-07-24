@@ -1,13 +1,17 @@
+sudo: false
 language: node_js
 node_js:
-  - "0.10"
+  - "6"
+  
+addons:
+  apt:
+    packages:
+      - gettext
 
 before_script:
   - npm install -g grunt-cli
 
 before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y gettext-base
   - chmod +x ./test/build_mo_files.sh
   - ./test/build_mo_files.sh
 
