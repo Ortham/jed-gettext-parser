@@ -1,70 +1,36 @@
 module.exports = function(grunt) {
-    /* Test browsers with > 1% usage. */
+    /* Test desktop browsers with > 1% usage. */
     var browsers = [
-    /* Internet Explorer.
-       8 and 9 don't work for some reason, can't tell why. */
+    /* Internet Explorer */
     {
         browserName: "internet explorer",
-        platform: "Windows 7",
-        version: "10"
-    }, {
-        browserName: "internet explorer",
-        platform: "Windows 7",
-        version: "11"
+        platform: "Windows 10",
+        version: "11.103"
+    },
+    /* Edge */
+    {
+        browserName: "MicrosoftEdge",
+        platform: "Windows 10",
+        version: "14.14393"
     },
     /* Firefox */
     {
         browserName: "firefox",
-        version: "32",
-        platform: "Windows 7"
-    }, {
-        browserName: "firefox",
-        version: "33",
-        platform: "Windows 7"
+        version: "54.0",
+        platform: "Windows 10"
     },
     /* Chrome */
     {
         browserName: "chrome",
-        platform: "Windows 7",
-        version: "36"
-    }, {
-        browserName: "chrome",
-        platform: "Windows 7",
-        version: "37"
-    }, {
-        browserName: "chrome",
-        platform: "Windows 7",
-        version: "38"
+        platform: "Windows 10",
+        version: "59.0"
     },
-    /* iOS */
+    /* Safari */
     {
-        browserName: "iphone",
-        platform: "OS X 10.9",
-        version: "7.1"
-    }, {
-        browserName: "iphone",
-        platform: "OS X 10.9",
-        version: "8"
-    }, {
-        browserName: "iphone",
-        platform: "OS X 10.9",
-        version: "8.1"
-    },
-    /* Android.
-       4.3 and 4.4 don't work for some reason, the tests themselves pass, but the process just completes with no pass or fail. */
-    {
-        browserName: "android",
-        platform: "Linux",
-        version: "4.1"
-    }/*, {
-        browserName: "android",
-        platform: "Linux",
-        version: "4.3"
-    }, {
-        browserName: "android",
-        platform: "Linux",
-        version: "4.4"
-    }*/];
+        browserName: "safari",
+        platform: "macOS 10.12",
+        version: "10.0"
+    }];
 
     grunt.initConfig({
         connect: {
