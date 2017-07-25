@@ -20,7 +20,7 @@
     if (textEncoding) {
         var TextDecoder = textEncoding.TextDecoder;
     } else {
-        var TextDecoder = window.TextDecoder;
+        var TextDecoder = window.TextDecoder ? window.TextDecoder : require('text-encoding').TextDecoder();
     }
 
     function Parser() {
@@ -81,7 +81,7 @@
 
         var language, pluralForms;
         if (msgBytes.id.byteLength == 0) {
-            var decoder = new TextDecoder();
+            var decoder = window.TextDecoder ? new TextDecoder() : require('text-encoding').TextDecoder();
             var str = decoder.decode(msgBytes.str);
 
             var headers = {};
@@ -159,7 +159,7 @@
 
         /* Create a TextDecoder for encoding conversion. */
         try {
-            var decoder = new TextDecoder(this._encoding);
+            var decoder = window.TextDecoder ? new TextDecoder(this._encoding) : require('text-encoding').TextDecoder(this._encoding);
         } catch(e) {
             throw new Error("The encoding label provided ('" + this._encoding + "') is invalid.");
         }
