@@ -16,20 +16,20 @@ module.exports = function(grunt) {
     /* Firefox */
     {
         browserName: "firefox",
-        version: "54.0",
+        version: "61.0",
         platform: "Windows 10"
     },
     /* Chrome */
     {
         browserName: "chrome",
         platform: "Windows 10",
-        version: "59.0"
+        version: "68.0"
     },
     /* Safari */
     {
         browserName: "safari",
-        platform: "macOS 10.12",
-        version: "10.0"
+        platform: "macOS 10.13",
+        version: "11.1"
     }];
 
     grunt.initConfig({
