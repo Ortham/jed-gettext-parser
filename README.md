@@ -3,9 +3,9 @@ Jed Gettext Parser
 
 JavaScript Gettext `.mo` file parsing for [Jed](https://github.com/slexaxton/Jed/).
 
-[![Build Status](https://travis-ci.org/WrinklyNinja/jed-gettext-parser.svg?branch=master)](https://travis-ci.org/WrinklyNinja/jed-gettext-parser)
-
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/oliverhamlet.svg)](https://saucelabs.com/u/oliverhamlet) [![Greenkeeper badge](https://badges.greenkeeper.io/WrinklyNinja/jed-gettext-parser.svg)](https://greenkeeper.io/)
+[![Build Status](https://travis-ci.org/Ortham/jed-gettext-parser.svg?branch=master)](https://travis-ci.org/Ortham/jed-gettext-parser)
+[![Greenkeeper badge](https://badges.greenkeeper.io/Ortham/jed-gettext-parser.svg)](https://greenkeeper.io/)
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/oliverhamlet.svg)](https://saucelabs.com/u/oliverhamlet)
 
 ## Introduction
 
@@ -15,7 +15,7 @@ JavaScript Gettext `.mo` file parsing for [Jed](https://github.com/slexaxton/Jed
 
 Jed doesn't supply Gettext translation file parsers, so this library can act as the bridge between Gettext binary files and Jed.
 
-*Note: Jed Gettext Parser is made to work with Jed, but is a third-party library. Please direct any support queries to this repository's issue tracker, and [the author](https://github.com/WrinklyNinja).*
+*Note: Jed Gettext Parser is made to work with Jed, but is a third-party library. Please direct any support queries to this repository's issue tracker, and [the author](https://github.com/Ortham).*
 
 ## Install
 

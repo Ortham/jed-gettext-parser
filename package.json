@@ -36,10 +36,10 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/WrinklyNinja/jed-gettext-parser.git"
+        "url": "https://github.com/Ortham/jed-gettext-parser.git"
     },
     "bugs": {
-        "url": "https://github.com/WrinklyNinja/jed-gettext-parser/issues"
+        "url": "https://github.com/Ortham/jed-gettext-parser/issues"
     },
-    "homepage": "https://github.com/WrinklyNinja/jed-gettext-parser"
+    "homepage": "https://github.com/Ortham/jed-gettext-parser"
 }
