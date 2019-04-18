@@ -24,12 +24,6 @@ module.exports = function(grunt) {
         browserName: "chrome",
         platform: "Windows 10",
         version: "68.0"
-    },
-    /* Safari */
-    {
-        browserName: "safari",
-        platform: "macOS 10.13",
-        version: "11.1"
     }];
 
     grunt.initConfig({
