@@ -8,9 +8,6 @@ addons:
     packages:
       - gettext
 
-before_script:
-  - npm install -g grunt-cli
-
 before_install:
   - chmod +x ./test/build_mo_files.sh
   - ./test/build_mo_files.sh
