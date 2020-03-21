@@ -1,4 +1,3 @@
-sudo: false
 language: node_js
 node_js:
   - "12"
@@ -7,13 +6,11 @@ addons:
   apt:
     packages:
       - gettext
+  sauce_connect: true
 
 before_install:
   - chmod +x ./test/build_mo_files.sh
   - ./test/build_mo_files.sh
-
-addons:
-  sauce_connect: true
 
 env:
   global:
