@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    # Don't run this workflow when a tag is pushed.
+    branches:
+      - '*'
+  pull_request:
+
+jobs:
+  linux:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install gettext
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-upgrade gettext
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Build MO files
+        run: |
+          chmod +x ./test/build_mo_files.sh
+          ./test/build_mo_files.sh
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+        env:
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+          BUILD_ID: ${{ github.run_id }}-${{ github.run_attempt }}

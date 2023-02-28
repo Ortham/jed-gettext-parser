@@ -3,8 +3,7 @@ Jed Gettext Parser
 
 JavaScript Gettext `.mo` file parsing for [Jed](https://github.com/slexaxton/Jed/).
 
-[![Build Status](https://travis-ci.org/Ortham/jed-gettext-parser.svg?branch=master)](https://travis-ci.org/Ortham/jed-gettext-parser)
-[![Greenkeeper badge](https://badges.greenkeeper.io/Ortham/jed-gettext-parser.svg)](https://greenkeeper.io/)
+![CI](https://github.com/Ortham/jed-gettext-parser/workflows/CI/badge.svg?branch=master&event=push)
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/oliverhamlet.svg)](https://saucelabs.com/u/oliverhamlet)
 
 ## Introduction

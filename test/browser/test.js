@@ -10,15 +10,14 @@ const baseURL = `http://127.0.0.1:${port}/test/browser/index.html`
 const sauceOptions = {
     'username': process.env.SAUCE_USERNAME,
     'accessKey': process.env.SAUCE_ACCESS_KEY,
-    'build': process.env.TRAVIS_JOB_ID,
+    'build': process.env.BUILD_ID,
     'name': 'mocha browser tests',
     /* As a best practice, set important test metadata and execution options
     such as build info, tags for reporting, and timeout durations.
     */
     'maxDuration': 3600,
     'idleTimeout': 1000,
-    'tags': ["master" ],
-    'tunnelIdentifier': process.env.TRAVIS_JOB_NUMBER
+    'tags': ["master" ]
 }
 
 const browsers = [
