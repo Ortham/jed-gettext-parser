@@ -8,11 +8,15 @@ const baseURL = `http://127.0.0.1:${port}/test/browser/index.html`
 
 const browsersCapabilities = [
     {
-        browserName: webdriver.Browser.CHROME
+        browserName: webdriver.Browser.CHROME,
+        'goog:chromeOptions': {
+            args: ['headless']
+        }
     },
     {
         browserName: webdriver.Browser.FIREFOX,
         'moz:firefoxOptions': {
+            args: ['--headless'],
             binary: firefox.Channel.RELEASE
         }
     }
