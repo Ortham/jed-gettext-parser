@@ -22,7 +22,7 @@ Jed Gettext Parser can be loaded as a browser global, an AMD module, or in Node.
 * [Typed Arrays](http://caniuse.com/#feat=typedarrays) ([polyfill](https://github.com/inexorabletash/polyfill/blob/master/typedarray.js))
 * [Encoding API](http://caniuse.com/#feat=textencoder) ([polyfill](https://github.com/inexorabletash/text-encoding))
 
-Node supports Typed Arrays, and npm will automatically handle the Encoding API polyfill as a dependency.
+Node.js supports both since version 11.0.0.
 
 ##### Browser Global
 

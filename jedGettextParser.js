@@ -1,5 +1,3 @@
-/* The text-encoding module is only strictly required for Node.js, and may not
-   be required in recent browsers, so don't specify it for them. */
 'use strict';
 (function(root, factory) {
     if (typeof define === 'function' && define.amd) {
@@ -9,19 +7,13 @@
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like environments that support module.exports,
         // like Node.
-        module.exports = factory(require('text-encoding'));
+        module.exports = factory();
     } else {
         // Browser globals
         root.jedGettextParser = factory();
     }
-}(this, function(textEncoding) {
+}(this, function() {
     /* Return what this module exports. */
-
-    if (textEncoding) {
-        var TextDecoder = textEncoding.TextDecoder;
-    } else {
-        var TextDecoder = window.TextDecoder;
-    }
 
     function Parser() {
         this._littleEndian;
