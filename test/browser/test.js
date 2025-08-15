@@ -52,7 +52,9 @@ for (const capabilities of browsersCapabilities) {
         });
 
         afterEach(async function() {
-            await driver.quit();
+            if (driver !== undefined) {
+                await driver.quit();
+            }
         });
 
         it('should pass all Mocha tests run in the browser', async function() {
