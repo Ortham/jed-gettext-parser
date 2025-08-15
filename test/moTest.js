@@ -165,49 +165,43 @@ describe('mo', function(){
                 }).should.not.throw();
             })
             it('should successfully load under a non-default domain', function(){
-                (function(){
-                    var opts = {
-                        domain: 'ui'
-                    };
+                var opts = {
+                    domain: 'ui'
+                };
 
-                    var locale_data = jedGettextParser.mo.parse(moArrayBuffer, opts);
-                    locale_data.should.be.an.Object;
-                    locale_data.should.have.property('ui');
-                    locale_data.ui.should.have.property('');
-                    locale_data.ui[''].should.have.properties({
-                        domain: 'ui',
-                        lang: 'ru_RU',
-                        plural_forms: 'nplurals=4; plural=(n==1) ? 0 : (n%10==1 && n%100!=11) ? 3 : ((n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) ? 1 : 2);'
-                    });
+                var locale_data = jedGettextParser.mo.parse(moArrayBuffer, opts);
+                locale_data.should.be.an.Object;
+                locale_data.should.have.property('ui');
+                locale_data.ui.should.have.property('');
+                locale_data.ui[''].should.have.properties({
+                    domain: 'ui',
+                    lang: 'ru_RU',
+                    plural_forms: 'nplurals=4; plural=(n==1) ? 0 : (n%10==1 && n%100!=11) ? 3 : ((n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) ? 1 : 2);'
+                });
 
-                    locale_data.ui.should.have.property('Manage Comments', [
-                        'Управление комментариями'
-                    ]);
-
-                }).should.not.throw();
+                locale_data.ui.should.have.property('Manage Comments', [
+                    'Управление комментариями'
+                ]);
             })
             it('should accept a valid encoding option', function(){
-                (function(){
-                    var opts = {
-                        encoding: 'windows-1252'
-                    };
+                var opts = {
+                    encoding: 'windows-1252'
+                };
 
-                    var locale_data = jedGettextParser.mo.parse(moArrayBuffer, opts);
-                    locale_data.should.be.an.Object;
-                    locale_data.should.have.property('messages');
-                    locale_data.messages.should.have.property('');
-                    locale_data.messages[''].should.have.properties({
-                        domain: 'messages',
-                        lang: 'ru_RU',
-                        plural_forms: 'nplurals=4; plural=(n==1) ? 0 : (n%10==1 && n%100!=11) ? 3 : ((n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) ? 1 : 2);'
-                    });
+                var locale_data = jedGettextParser.mo.parse(moArrayBuffer, opts);
+                locale_data.should.be.an.Object;
+                locale_data.should.have.property('messages');
+                locale_data.messages.should.have.property('');
+                locale_data.messages[''].should.have.properties({
+                    domain: 'messages',
+                    lang: 'ru_RU',
+                    plural_forms: 'nplurals=4; plural=(n==1) ? 0 : (n%10==1 && n%100!=11) ? 3 : ((n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) ? 1 : 2);'
+                });
 
-                    /* String gets mangled because it's the wrong encoding. */
-                    locale_data.messages.should.have.property('Manage Comments', [
-                        'Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ ÐºÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ð°Ñ€Ð¸ÑÐ¼Ð¸'
-                    ]);
-
-                }).should.not.throw();
+                /* String gets mangled because it's the wrong encoding. */
+                locale_data.messages.should.have.property('Manage Comments', [
+                    'Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ ÐºÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ð°Ñ€Ð¸ÑÐ¼Ð¸'
+                ]);
             })
             it('should throw for an invalid encoding option', function(){
                 (function(){
@@ -219,21 +213,18 @@ describe('mo', function(){
                 }).should.throw("The encoding label provided ('fake-encoding') is invalid.");
             })
             it('should provide output accepted by Jed.', function(){
-                (function(){
-                    var opts = {
-                        domain: 'ui'
-                    };
+                var opts = {
+                    domain: 'ui'
+                };
 
-                    var locale_data = jedGettextParser.mo.parse(moArrayBuffer, opts);
+                var locale_data = jedGettextParser.mo.parse(moArrayBuffer, opts);
 
-                    var i18n = new Jed({
-                        'locale_data': locale_data,
-                        'domain': 'ui'
-                    });
+                var i18n = new Jed({
+                    'locale_data': locale_data,
+                    'domain': 'ui'
+                });
 
-                    i18n.gettext('Manage Comments').should.equal('Управление комментариями');
-
-                }).should.not.throw();
+                i18n.gettext('Manage Comments').should.equal('Управление комментариями');
             })
         })
 
@@ -247,17 +238,13 @@ describe('mo', function(){
             })
 
             it('should be able to decode mo files encoded in Windows-1251', function(){
-                (function(){
+                var locale_data = jedGettextParser.mo.parse(moArrayBuffer);
+                locale_data.should.be.an.Object;
+                locale_data.should.have.property('messages');
 
-                    var locale_data = jedGettextParser.mo.parse(moArrayBuffer);
-                    locale_data.should.be.an.Object;
-                    locale_data.should.have.property('messages');
-
-                    locale_data.messages.should.have.property('Manage Comments', [
-                        'Управление комментариями'
-                    ]);
-
-                }).should.not.throw();
+                locale_data.messages.should.have.property('Manage Comments', [
+                    'Управление комментариями'
+                ]);
             })
         })
     })
