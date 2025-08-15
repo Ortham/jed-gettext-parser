@@ -198,10 +198,20 @@ describe('mo', function(){
                     plural_forms: 'nplurals=4; plural=(n==1) ? 0 : (n%10==1 && n%100!=11) ? 3 : ((n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) ? 1 : 2);'
                 });
 
-                /* String gets mangled because it's the wrong encoding. */
-                locale_data.messages.should.have.property('Manage Comments', [
-                    'Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ ÐºÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ð°Ñ€Ð¸ÑÐ¼Ð¸'
-                ]);
+                locale_data.messages.should.have.property('Manage Comments');
+                locale_data.messages['Manage Comments'].should.have.length(1);
+
+                var message = locale_data.messages['Manage Comments'][0];
+
+                if (typeof Buffer !== 'undefined') {
+                    /* There's a bug in Node.js's implementation of TextDecoder that causes it to
+                       incorrectly decode several Windows-1252 characters, see
+                       <https://github.com/nodejs/node/issues/56542>. */
+                    Buffer.from(message, 'utf8').toString('base64').should.equal('w5DCo8OQwr/DkcKAw5DCsMOQwrLDkMK7w5DCtcOQwr3DkMK4w5DCtSDDkMK6w5DCvsOQwrzDkMK8w5DCtcOQwr3DkcKCw5DCsMORwoDDkMK4w5HCj8OQwrzDkMK4');
+                } else {
+                    /* UTF-8 string read using the Windows-1252 encoding. */
+                    message.should.equal('Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ ÐºÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ð°Ñ€Ð¸ÑÐ¼Ð¸');
+                }
             })
             it('should throw for an invalid encoding option', function(){
                 (function(){
